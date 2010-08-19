@@ -1,0 +1,9 @@
+Construction of the RANSAC package
+-----------------------------
+
+1. Launch Matlab and cd to the directory containing the revisioned version of the RANSAC toolbox
+2. Add the directory containing the add_license.m function to the path (e.g. addpath('~/Research/Misc/add_license/'))
+3. Execute the script SetPathLocal.m
+4. Launch the script CreateRANSACToolbox.m after having checked the parameters
+5. Copy the files RANSAC_XX-XXX-XXXX -> RANSAC.zip inside the web site folders
+6. Update the version of the package in the web page (in the form dd-mmm-yyyy)
