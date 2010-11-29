@@ -9,9 +9,6 @@ function [Theta, k] = estimate_RST(X, s)
 % phi       is the rotation angle
 % tx, ty    is the translation
 %
-% AUTHOR
-% Marco Zuliani - marco.zuliani@gmail.com
-%
 % VERSION:
 % 1.0.0
 %
@@ -24,11 +21,21 @@ function [Theta, k] = estimate_RST(X, s)
 % Theta             = estimated parameter vector 
 % k                 = dimension of the minimal subset
 
+
+% AUTHOR:
+% Marco Zuliani, email: marco.zuliani@gmail.com
+% Copyright (C) 2009 by Marco Zuliani 
+% 
+% LICENSE:
+% This toolbox is distributed under the terms of the GNU GPL.
+% Please refer to the files COPYING.txt for more information.
+
+
 % HISTORY:
 % 1.0.0             = 08/27/08 - initial version
 
 % cardinality of the MSS
-k = 2;
+k = 3;
 
 if (nargin == 0) || isempty(X)
     Theta = [];
@@ -46,7 +53,7 @@ if (N < k)
         'At least 2 point correspondences are required');
 end;
 
-H = RSTLS(X(1:2, :), X(3:4, :));
-Theta = [H(1,1); H(2,1); H(1,3); H(2,3)];
+[H A b]= affineLS(X(1:2, :), X(3:4, :));
+Theta = [A(:); b(:)];
 
 return;

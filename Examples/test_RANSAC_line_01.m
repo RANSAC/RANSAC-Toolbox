@@ -83,7 +83,7 @@ try
     ML = true;
 catch
     % probably the optimization toolbox is not installed
-    ML = flase;
+    ML = false;
 end;
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

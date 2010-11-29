@@ -1,5 +1,5 @@
-Construction of the RANSAC package
------------------------------
+Construction of the RANSAC package for Matlab
+---------------------------------------
 
 1. Launch Matlab and cd to the directory containing the revisioned version of the RANSAC toolbox
 2. Add the directory containing the add_license.m function to the path (e.g. addpath('~/Research/Misc/add_license/'))

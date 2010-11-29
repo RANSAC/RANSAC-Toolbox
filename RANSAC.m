@@ -259,15 +259,22 @@ end;
 % Randomization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if ~(options.fix_seed)
-    rand('twister',sum(100*clock));
+    seed = sum(100*clock);
+else
+    seed = 2222;
 end;
 
-global RANSAC_TWISTER_STATE;
-global RANSAC_TWISTER_STATE_UPDATED;
+rand('twister', seed);
+randn('state', seed);
+
+global RANSAC_SEED;
+RANSAC_SEED = seed;
+
+global RANSAC_SEED_UPDATED;
 if (options.fix_seed)
-    RANSAC_TWISTER_STATE_UPDATED = RANSAC_TWISTER_STATE;
+    RANSAC_SEED_UPDATED = RANSAC_SEED;
 else
-    RANSAC_TWISTER_STATE_UPDATED = [];
+    RANSAC_SEED_UPDATED = [];
 end;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

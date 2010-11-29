@@ -56,8 +56,10 @@ Tamar Back - suggested to check the parameter sigma
 Frederico Lopes  - raised the issue of repeated points in the  homography estimation 
 Jayanth Nayak - pointed out a bug in the estimation of the lines
 David Portabella Clotet  - pointed out two bugs
-Chris Volpe - pointed out a bug in handling ind_tabu
-Zhe Zang - noted a ill conditioning related warning in the homography estimation routines
+Chris Volpe - pointed out a bug in handling ind_tabu and random number seed
+Zhe Zang - noted a ill conditioning related warning in the homography
+estimation routines
+Ali Kalihili - pointed out a typo in the tutorial document
 
 If you plan to use this software package in and referenced published
 material (e.g. conferences, journals, workshops...) an acknowledgment

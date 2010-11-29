@@ -15,7 +15,7 @@ destination_dir = '/Users/zuliani/Research/RANSACtoolbox';
 author = 'Marco Zuliani';
 % email = 'marco.zuliani@gmail.com';
 email = 'marco.zuliani@gmail.com';
-year = '2009';
+year = '2010';
 license = 'GPL';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

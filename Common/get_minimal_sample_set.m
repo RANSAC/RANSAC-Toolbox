@@ -77,24 +77,24 @@ if ~isempty(ind_tabu)
 end;
 
 % get the seed for the random number generator
-global RANSAC_TWISTER_STATE_UPDATED;
+global RANSAC_SEED_UPDATED;
 
 % if we have an estimation function then loop until the MSS actually
 % produces an estimate
 while true
 
     % update the seed
-    if ~isempty(RANSAC_TWISTER_STATE_UPDATED)
-        RANSAC_TWISTER_STATE_UPDATED = RANSAC_TWISTER_STATE_UPDATED + 1;
+    if ~isempty(RANSAC_SEED_UPDATED)
+        RANSAC_SEED_UPDATED = RANSAC_SEED_UPDATED + 1;
     end;
 
     % uniform sampling
     if isempty(P_s)
         % uniform sampling
-        mask = get_rand(k, N, RANSAC_TWISTER_STATE_UPDATED);
+        mask = get_rand(k, N, RANSAC_SEED_UPDATED);
     else
         % probabilistic sampling
-        mask = get_rand_prob(k, P_s(ind), RANSAC_TWISTER_STATE_UPDATED);
+        mask = get_rand_prob(k, P_s(ind), RANSAC_SEED_UPDATED);
     end;
 
     s = ind(mask);

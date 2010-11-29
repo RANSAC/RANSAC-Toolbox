@@ -9,7 +9,7 @@ function SetPathLocal(base)
 % Marco Zuliani - marco.zuliani@gmail.com
 %
 % VERSION:
-% 1.0.3
+% 1.0.4
 %
 % INPUT:
 % base              = base directory (optional)
@@ -21,6 +21,7 @@ function SetPathLocal(base)
 % 1.0.1                         ??/??/07 - add base directory parameter
 % 1.0.2                         11/08/07 - some improvements
 % 1.0.3                         06/26/08 - added seed global variable
+% 1.0.4                         11/25/10 - automatic addition of model directories
 
 warning('off','MATLAB:dispatcher:pathWarning');
 
@@ -33,13 +34,15 @@ warning('off','MATLAB:dispatcher:pathWarning');
 % from 0 to 2^32-1 or the output of rand(method). If method is set to 
 % 'seed', then s must be either a scalar integer value from 0 to 2^31-2 or 
 % the output of rand(method).
-global RANSAC_TWISTER_STATE;
-RANSAC_TWISTER_STATE = 2222;
+global RANSAC_SEED;
+RANSAC_SEED = 2222;
 
 % if the base directory is not specified, then pick the current one
 global RANSAC_ROOT;
 if (nargin < 1) || isempty(base)
     RANSAC_ROOT = pwd;
+else
+    RANSAC_ROOT = base;
 end;
 
 if nargin < 1
@@ -49,13 +52,25 @@ end;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % init Matlab directories
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dirs{1} = '';
-dirs{2} = '/Common';
-dirs{3} = '/Models/Common';
-dirs{4} = '/Models/Line';
-dirs{5} = '/Models/Plane';
-dirs{6} = '/Models/RST';
-dirs{7} = '/Models/Homography';
+models_dir = '/Models/';
+file_list = dir( sprintf('%s%s', RANSAC_ROOT, models_dir) );
+nd = 1;
+for h = 1:numel(file_list)
+  if ( file_list(h).isdir ) && ...
+     ( ~strcmp(file_list(h).name, '..') ) && ...
+     ( isempty(strfind(file_list(h).name, '.')) ) 
+    dirs{nd} =  sprintf('%s%s', models_dir, file_list(h).name);
+    nd = nd + 1;
+  end;
+end;
+
+fprintf('\n%d models automatically added:\n', nd-1);
+for h = 1:nd-1
+  fprintf('%s\n', dirs{h});
+end;
+
+dirs{nd} = '/Common';
+dirs{nd+1} = '/.';
 
 for h = 1:numel(dirs)
     addpath(path, sprintf('%s%s', RANSAC_ROOT, dirs{h}));

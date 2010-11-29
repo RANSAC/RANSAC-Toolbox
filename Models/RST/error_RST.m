@@ -1,6 +1,6 @@
-function [E T_noise_squared d] = error_line(Theta, X, sigma, P_inlier)
+function [E T_noise_squared d] = error_RST(Theta, X, sigma, P_inlier)
 
-% [E T_noise_squared d] = error_line(Theta, X, sigma, P_inlier)
+% [E T_noise_squared d] = error_RST(Theta, X, sigma, P_inlier)
 %
 % DESC:
 % estimate the squared symmetric transfer error due to the RST 
@@ -10,7 +10,7 @@ function [E T_noise_squared d] = error_line(Theta, X, sigma, P_inlier)
 % Marco Zuliani - marco.zuliani@gmail.com
 %
 % VERSION:
-% 1.0.0
+% 1.0.1
 %
 % INPUT:
 % Theta             = homography parameter vector
@@ -26,20 +26,20 @@ function [E T_noise_squared d] = error_line(Theta, X, sigma, P_inlier)
 
 % HISTORY
 %
-% 1.0.0             - 27/08/06 initial version
+% 1.0.0             - 08/27/06 initial version
+% 1.0.1             - 25/11/06 modification using mapping functions
 
 % compute the squared symmetric reprojection error
 E = [];
 if ~isempty(Theta) && ~isempty(X)
-        
-    X12(1, :) = Theta(1)*X(1, :) - Theta(2)*X(2, :) + Theta(3);
-    X12(2, :) = Theta(2)*X(1, :) + Theta(1)*X(2, :) + Theta(4);
 
-    det = Theta(1)*Theta(1)+Theta(2)*Theta(2);
-    dx = X(3, :) - Theta(3);
-    dy = X(4, :) - Theta(4);
-    X21(1, :) = ( Theta(1)*dx + Theta(2)*dy)/det;
-    X21(2, :) = (-Theta(2)*dx + Theta(1)*dy)/det;
+    N = size(X, 2);        
+
+    X12 = zeros(2, N);
+    [X12(1, :) X12(2, :)] = mapping_RST(X(1, :), X(2, :), true, Theta);
+
+    X21 = zeros(2, N);
+    [X21(1, :) X21(2, :)] = mapping_RST(X(3, :), X(4, :), false, Theta);
     
     E1 = sum((X(1:2, :)-X21).^2, 1);
     E2 = sum((X(3:4, :)-X12).^2, 1);
