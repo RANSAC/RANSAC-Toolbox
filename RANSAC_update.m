@@ -74,7 +74,7 @@ version_num = datenum(version, 'dd-mmm-yyyy');
 try
     version_num_web = datenum(version_web, 'dd-mmm-yyyy');
 catch
-    error('RANSACToolbox:versionInfoError', 'Error parsing version information');
+    error('RANSACToolbox:versionInfoError', sprintf('Error parsing version information: %s', version_web));
 end;
 
 if (version_num_web <= version_num)
