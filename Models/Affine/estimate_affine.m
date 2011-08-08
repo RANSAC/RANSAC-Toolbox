@@ -1,13 +1,14 @@
-function [Theta, k] = estimate_RST(X, s)
+function [Theta, k] = estimate_affine(X, s)
 
-% [Theta k] = estimate_RST(X, s)
+% [Theta k] = estimate_affine(X, s)
 %
 % DESC:
-% estimate the parameters of an RST trasformation via least squares.
-% Note that Theta = [s*cos(phi); s*sin(phi); tx; ty] where:
-% s         is the scaling factor
-% phi       is the rotation angle
-% tx, ty    is the translation
+% estimate the parameters of an affine trasformation via least squares.
+%
+% X2 = A * X1 + b
+%
+% where Theta = [a11; a21; a12; a22; b1; b2];
+
 %
 % VERSION:
 % 1.0.0

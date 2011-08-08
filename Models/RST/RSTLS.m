@@ -5,9 +5,6 @@ function [H s phi T] = RSTLS(X1, X2, normalization)
 % DESC:
 % computes the RST transformation between the point pairs X1, X2
 %
-% AUTHOR
-% Marco Zuliani - marco.zuliani@gmail.com
-%
 % VERSION:
 % 1.0.1
 %
@@ -21,6 +18,16 @@ function [H s phi T] = RSTLS(X1, X2, normalization)
 % s             = scaling
 % phi           = rotation angle
 % T             = translation vector
+
+
+% AUTHOR:
+% Marco Zuliani, email: marco.zuliani@gmail.com
+% Copyright (C) 2011 by Marco Zuliani 
+% 
+% LICENSE:
+% This toolbox is distributed under the terms of the GNU GPL.
+% Please refer to the files COPYING.txt for more information.
+
 
 % HISTORY
 % 1.0.0         08/27/08 - intial version
@@ -48,7 +55,7 @@ end;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % normalize the input
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if normalization
+if (normalization) && (N > 2)
     % fprintf('\nNormalizing...')
     [X1, T1] = normalize_points(X1);
     [X2, T2] = normalize_points(X2);
@@ -136,7 +143,7 @@ H = [Theta(1) -Theta(2) Theta(3); Theta(2) Theta(1) Theta(4); 0 0 1];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % de-normalize the parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if normalization
+if (normalization) && (N > 2)
     H = T2\H*T1;
 end;
 H = H/H(9);

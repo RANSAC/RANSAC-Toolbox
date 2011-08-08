@@ -33,19 +33,19 @@ function [E T_noise_squared d] = error_affine(Theta, X, sigma, P_inlier)
 
 % HISTORY
 %
-% 1.0.0             - 27/08/06 initial version
+% 1.0.0             - 12/12/10 initial version
 
 % compute the squared symmetric reprojection error
 E = [];
 if ~isempty(Theta) && ~isempty(X)
+
+    N = size(X, 2);
     
-    X12(1, :) = Theta(1)*X(1, :) + Theta(3)*X(2, :) + Theta(5);
-    X12(2, :) = Theta(2)*X(1, :) + Theta(4)*X(2, :) + Theta(6);
-    
-    det = Theta(1)*Theta(4)-Theta(2)*Theta(3);
-    dy = Theta(6) - X(4, :);
-    X21(1, :) =  (dy*Theta(3) - Theta(4)*Theta(5) + Theta(4)*X(3, :))/det;
-    X21(2, :) = -(dy*Theta(1) - Theta(2)*Theta(5) + Theta(2)*X(3, :))/det;
+    X12 = zeros(2, N);
+    [X12(1, :) X12(2, :)] = mapping_affine(X(1, :), X(2, :), true, Theta);
+
+    X21 = zeros(2, N);
+    [X21(1, :) X21(2, :)] = mapping_affine(X(3, :), X(4, :), false, Theta);
     
     E1 = sum((X(1:2, :)-X21).^2, 1);
     E2 = sum((X(3:4, :)-X12).^2, 1);

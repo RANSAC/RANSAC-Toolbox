@@ -85,6 +85,8 @@ of templates for bibtex:
 Updates History
 ---------------
 
+- August 2011: General fixes. Added affine model. 
+
 - 18 October 2009: Fixed a bug in get_minimal_sample_set.m to handle
    the tabu indices. Improved RST estimation routines. Major improvement
    in the manual/tutorial

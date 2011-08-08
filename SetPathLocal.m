@@ -78,4 +78,11 @@ end;
 
 warning('off','MATLAB:dispatcher:pathWarning');
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% if Octave take care of the windows server
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if (exist('OCTAVE_VERSION') ~= 0)
+    setenv("GNUTERM", "x11")
+end;
+
 return

@@ -1,8 +1,8 @@
 % NAME:
-% test_RANSAC_RST.m
+% test_RANSAC_affine.m
 %
 % DESC:
-% test to estimate the parameters of an RST transformation
+% test to estimate the parameters of an affine transformation
 
 close all
 clear 
@@ -13,9 +13,9 @@ clear
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % number of points
-N = 300;
+N = 200;
 % inilers percentage
-p = 0.25;
+p = 0.75;
 % noise
 sigma = 1;
 
@@ -23,8 +23,8 @@ sigma = 1;
 options.epsilon = 1e-6;
 options.P_inlier = 1-1e-4;
 options.sigma = sigma;
-options.est_fun = @estimate_RST;
-options.man_fun = @error_RST;
+options.est_fun = @estimate_affine;
+options.man_fun = @error_affine;
 options.mode = 'MLESAC';
 options.Ps = [];
 options.notify_iter = [];
@@ -46,14 +46,13 @@ randn('state', seed);
 % scaling is in [1-As, 1+As]
 As = 0.5;
 s   = 1 + (As * (rand()-0.5));
-% angle is in [-Aphi Aphi]
-Aphi = 30;
-phi = Aphi*pi*(rand()-0.5);
+phi = pi*(rand()-0.5);
 T   = rand(2, 1);
+gamma = 0.05*randn(1); 
 
 C = s*cos(phi);
 S = s*sin(phi);
-H = [C -S T(1); S C T(2); 0 0 1];
+H = [C C*gamma-S T(1); S S*gamma+C T(2); 0 0 1];
 
 % generate a set of points correspondences
 Ni = round(p*N);

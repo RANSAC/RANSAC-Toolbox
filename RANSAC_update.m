@@ -70,6 +70,9 @@ version_web = s(p1+length(str)+(0:11));
 version_web(4) = '-';
 version_web(8) = '-';
 
+version = strtrim(version);
+version_web = strtrim(version_web);
+
 version_num = datenum(version, 'dd-mmm-yyyy');
 try
     version_num_web = datenum(version_web, 'dd-mmm-yyyy');

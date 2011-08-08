@@ -16,7 +16,7 @@ RANSAC4Dummies_filename = strcat(root_dir, '/Papers/RANSAC4Dummies/RANSAC4Dummie
 destination_dir = strcat(root_dir, '/Research/RANSAC-toolbox');
 author = 'Marco Zuliani';
 email = 'marco.zuliani@gmail.com';
-year = '2010';
+year = '2011';
 license = 'GPL';
 
 addpath(path, './Development')
@@ -69,7 +69,7 @@ archive_filename = sprintf('%s-%s', toolbox_dirname, date);
 fprintf('\nToolbox path:     %s', toolbox_dirname);
 fprintf('\nArchive filename: %s', archive_filename);
 
-% copy the files bby performing an export to the target dir
+% copy the files by performing an export to the target dir
 if isOctave
   system(sprintf("svn export %s %s",'../RANSAC/', toolbox_dirname));
 else
@@ -91,12 +91,12 @@ end;
 
 % remove the autosaved files and other trash
 switch computer
-    case {'GLNX86', 'MAC', 'MACI', 'GLNXA64', 'SOL64', 'i386-apple-darwin10.4.0'}
+    case {'GLNX86', 'MAC', 'MACI', 'GLNXA64', 'SOL64', 'i386-apple-darwin10.8.0'}
         trash = '\.m~$|^[\.DS_Store]$';
     case {'PCWIN', 'PCWIN64'}
         trash = '\.asv$';
     otherwise
-        error('Unknown platform')
+        error('Unknown platform (check the OS version is correct)')
 end;
 
 f = get_file_list(toolbox_dirname, trash, true);
@@ -112,12 +112,12 @@ f = get_file_list(toolbox_dirname, '\.m$', true);
 
 % take care of the damn CR LR
 switch computer
-    case {'GLNX86', 'MAC', 'MACI', 'GLNXA64', 'SOL64', 'i386-apple-darwin10.4.0'}
+    case {'GLNX86', 'MAC', 'MACI', 'GLNXA64', 'SOL64', 'i386-apple-darwin10.8.0'}
         cmd = 'dos2unix -q';
     case {'PCWIN', 'PCWIN64'}
         cmd = 'unix2dos';
     otherwise
-        error('Unknown platform')
+        error('Unknown platform (check the OS version is correct)')
 end;
 for h = 1:numel(f)
     system(sprintf('%s %s', cmd, f(h).filename));
@@ -133,14 +133,17 @@ toolbox_doc_dirname = [toolbox_dirname '/Docs'];
 mkdir(toolbox_doc_dirname);
 copyfile(RANSAC4Dummies_filename, toolbox_doc_dirname);
 
+% change directory
+current_dir = pwd();
+cd(destination_dir)
+
 switch computer
-    case {'GLNX86', 'MAC', 'MACI', 'GLNXA64', 'SOL64', 'i386-apple-darwin10.4.0'}
-        % eval(sprintf('!tar -czvf %s.tgz %s/', archive_filename, toolbox_dirname));
+    case {'GLNX86', 'MAC', 'MACI', 'GLNXA64', 'SOL64', 'i386-apple-darwin10.8.0'}
         if isOctave
           # note that the traditional zip command does not work
           # we would get the following error:
           # error: zip: zip failed with exit status = 12          
-          str = sprintf('zip -r %s.zip %s', archive_filename, toolbox_dirname);     
+          str = sprintf('zip -r %s.zip RANSAC', archive_filename);     
           [status, output] = system(str);
         else
           zip(sprintf('%s.zip', archive_filename), toolbox_dirname);
@@ -148,5 +151,7 @@ switch computer
     case {'PCWIN', 'PCWIN64'}
         zip(sprintf('%s.zip', archive_filename), toolbox_dirname);
     otherwise
-        error('Unknown platform')
+        error('Unknown platform (check the OS version is correct)')
 end;
+
+cd(current_dir)
