@@ -1,6 +1,6 @@
-function RANSAC_update()
+function RANSAC_update(force)
 
-% RANSAC_update()
+% RANSAC_update(force)
 %
 % DESC:
 % checks if it is available an updated version of the Toolbox and installs 
@@ -10,7 +10,10 @@ function RANSAC_update()
 % Marco Zuliani - marco.zuliani@gmail.com
 %
 % VERSION:
-% 1.0.2
+% 1.0.3
+%
+% INPUT:
+% force             = set to true to force a new download no matter what
 %
 % SEE ALSO          SetPathLocal.m
 
@@ -18,6 +21,7 @@ function RANSAC_update()
 % 1.0.0             07/25/08 - intial version - R.I.P. Dr. R. Pausch
 % 1.0.1             11/19/08 - modified links for the new Matlab central
 % 1.0.2             11/19/08 - modified links for my site
+% 1.0.3             08/07/11 - added force parameter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Parameters
@@ -28,6 +32,10 @@ url_version = 'http://vision.ece.ucsb.edu/~zuliani/Code/Code.html';
 url_download = 'http://vision.ece.ucsb.edu/~zuliani/Code/Packages/RANSAC/RANSAC.zip';
 dummy_filename = 'RANSAC.dummy';
 post_installation_filename = 'post_installation.mat';
+
+if nargin < 1
+   force = false;
+end
 
 global RANSAC_ROOT;
 
@@ -80,9 +88,13 @@ catch
     error('RANSACToolbox:versionInfoError', sprintf('Error parsing version information: %s', version_web));
 end;
 
-if (version_num_web <= version_num)
+if (version_num_web <= version_num) && (force == false)
     fprintf('\nYour version (%s) is up to date.\n', version);
     return;
+end;
+
+if (exist('OCTAVE_VERSION') ~= 0)
+    error('RANSACToolbox:updateError', 'Sorry, but automatic updates for Octave are not yet supported. Download the new version of the package from %s', url_download)
 end;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

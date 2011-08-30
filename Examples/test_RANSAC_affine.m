@@ -15,7 +15,7 @@ clear
 % number of points
 N = 200;
 % inilers percentage
-p = 0.75;
+p = 0.25;
 % noise
 sigma = 1;
 
@@ -25,7 +25,7 @@ options.P_inlier = 1-1e-4;
 options.sigma = sigma;
 options.est_fun = @estimate_affine;
 options.man_fun = @error_affine;
-options.mode = 'MLESAC';
+options.mode = 'MSAC';
 options.Ps = [];
 options.notify_iter = [];
 options.min_iters = 1000;
@@ -42,11 +42,13 @@ seed = 34545;
 rand('twister', seed);
 randn('state', seed);
 
-% generate an RST transformation
+% generate an affine transformation
 % scaling is in [1-As, 1+As]
 As = 0.5;
 s   = 1 + (As * (rand()-0.5));
-phi = pi*(rand()-0.5);
+% angle is in [-Aphi Aphi]
+Aphi = 30;
+phi = Aphi*pi*(rand()-0.5);
 T   = rand(2, 1);
 gamma = 0.05*randn(1); 
 
