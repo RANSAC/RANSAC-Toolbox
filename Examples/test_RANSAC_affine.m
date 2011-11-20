@@ -27,7 +27,7 @@ options.est_fun = @estimate_affine;
 options.man_fun = @error_affine;
 options.mode = 'MSAC';
 options.Ps = [];
-options.notify_iter = [];
+options.notify_iters = [];
 options.min_iters = 1000;
 options.fix_seed = false;
 options.reestimate = true;
@@ -50,7 +50,7 @@ s   = 1 + (As * (rand()-0.5));
 Aphi = 30;
 phi = Aphi*pi*(rand()-0.5);
 T   = rand(2, 1);
-gamma = 0.05*randn(1); 
+gamma = 0.30*randn(1); 
 
 C = s*cos(phi);
 S = s*sin(phi);
@@ -103,8 +103,9 @@ R = [results.Theta(1) -results.Theta(2); ...
     results.Theta(2) results.Theta(1)];
 T = results.Theta(3:4);
 
-X1_map = R*X1 + repmat(T, 1, size(X1,2));
-X2_map = R\(X2 - repmat(T, 1, size(X1,2)));
+A = H(1:2, 1:2);
+X1_map = A*X1 + repmat(T, 1, size(X1,2));
+X2_map = A\(X2 - repmat(T, 1, size(X1,2)));
 
 figure;
 

@@ -239,10 +239,11 @@ if (N < k)
     return;
 end
 
+% get the noise threshold via Chi squared distribution
+[dummy T_noise_squared d] = feval(options.man_fun, [], [], options.sigma, options.P_inlier);
+
 % calculate the probability for the inlier detection.
 if ~isfield(options, 'T_noise_squared')
-    % get the noise threshold via Chi squared distribution
-    [dummy T_noise_squared d] = feval(options.man_fun, [], [], options.sigma, options.P_inlier);
     options.T_noise_squared = T_noise_squared;
     if (options.verbose)
         fprintf('\nSquared noise threshold = %f, (assuming Gaussian noise, for sigma = %f)', T_noise_squared, options.sigma);

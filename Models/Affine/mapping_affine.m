@@ -57,8 +57,8 @@ else
     dx = xs-b1;
     dy = ys-b2;
     det = a11*a22 - a12*a21;
-    xd = ( a22*xs - a12*ys)/det;
-    yd = (-a21*xs + a11*ys)/det;
+    xd = ( a22*dx - a12*dy)/det;
+    yd = (-a21*dx + a11*dy)/det;
 end;
 
 % make sure the points are returned as row vectors
