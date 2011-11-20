@@ -52,6 +52,7 @@ Acknowledgments
 ---------------
 I would like to thank the following people for their useful feedback:
 
+Dong Li - pointed out some bug in the example files
 Tamar Back - suggested to check the parameter sigma
 Frederico Lopes  - raised the issue of repeated points in the  homography estimation 
 Jayanth Nayak - pointed out a bug in the estimation of the lines

@@ -1,9 +1,10 @@
 Construction of the RANSAC package for Matlab/Octave
 ---------------------------------------------
 
+-. Make sure the latest version of the pdf of RANSAC4Dummies is ready
 -. Launch Matlab/Octave and cd to the directory containing the revisioned version of the RANSAC toolbox
 -. Execute the script SetPathLocal.m
--. Make sure the directory RANSAC-toolbox exists in the right place (check also the parameters)
+-. Make sure the directory RANSAC-toolbox exists in the right place (check also the parameters inside the script)
 -. Make sure the programs dos2unix and unix2dos are present in the path
 -. Launch the script CreateRANSACToolbox.m after having checked the parameters
 -. Copy the files RANSAC_XX-XXX-XXXX -> RANSAC.zip inside the web site folders
