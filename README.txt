@@ -86,6 +86,8 @@ of templates for bibtex:
 Updates History
 ---------------
 
+- Jan 2012: Migrating to github
+
 - Nov 2011: Fixed some bugs in the example scripts.
 
 - August 2011: General fixes. Added affine model. 
