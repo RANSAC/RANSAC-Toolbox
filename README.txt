@@ -83,18 +83,19 @@ of templates for bibtex:
 }
 
 
-Updates History
----------------
+Updates History (Discontinued: check the log on github)
+-------------------------------------------------------
 
-- Jan 2012: Migrating to github
+- Jan 2012: Migrating to github. From now on please check the update history 
+  on github.
 
 - Nov 2011: Fixed some bugs in the example scripts.
 
 - August 2011: General fixes. Added affine model. 
 
 - 18 October 2009: Fixed a bug in get_minimal_sample_set.m to handle
-   the tabu indices. Improved RST estimation routines. Major improvement
-   in the manual/tutorial
+  the tabu indices. Improved RST estimation routines. Major improvement
+  in the manual/tutorial
 
 - ?? February 2009: Modified the get_consensus_set_cost. Added the 
   MLESAC mode. Updated the manual/tutorial
