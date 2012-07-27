@@ -55,6 +55,7 @@ end;
 models_dir = '/Models/';
 file_list = dir( sprintf('%s%s', RANSAC_ROOT, models_dir) );
 nd = 1;
+dirs = {};
 for h = 1:numel(file_list)
   if ( file_list(h).isdir ) && ...
      ( ~strcmp(file_list(h).name, '..') ) && ...
@@ -81,8 +82,8 @@ warning('off','MATLAB:dispatcher:pathWarning');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % if Octave take care of the windows server
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if (exist('OCTAVE_VERSION') ~= 0)
-    setenv("GNUTERM", "x11")
+if (exist('OCTAVE_VERSION','var') ~= 0)
+    setenv('GNUTERM', 'x11')
 end;
 
 return
