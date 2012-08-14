@@ -1,6 +1,6 @@
 function [H A] = HomographyDLT(X1, X2, mode, normalization)
 
-% [H A] = HomographyDLT(X1, X2, mode)
+% [H A] = HomographyDLT(X1, X2, mode, normalization)
 %
 % DESC:
 % computes the homography between the point pairs X1, X2
@@ -13,8 +13,8 @@ function [H A] = HomographyDLT(X1, X2, mode, normalization)
 %
 % INPUT:
 % X1, X2        = point matches (cartesian coordinates)
-% mode          = 0 -> Hartley Zisserman formulation
-%                 1 -> Zuliani formulation (default)
+% mode          = 'HZ' -> Hartley Zisserman formulation
+%                 'MZ' -> Zuliani formulation (default)
 % normalization = true (default) or false to enable/disable point 
 %                 normalzation
 %
@@ -64,11 +64,9 @@ switch mode
     case 'MZ'
     A = get_A_MZ(X1, X2);        
 end;
-try
+
 [U S V] = svd(A);
-catch
-    keyboard
-end;
+
 h = V(:, 9);
     
 % reshape the output
