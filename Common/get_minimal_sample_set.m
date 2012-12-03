@@ -19,7 +19,7 @@ function [s, Theta_hat] = get_minimal_sample_set(k, X, P_s, est_fun, validateMSS
 %
 %                     Theta = est_fun(X, s)
 %
-% validateMSS_fun     = function that validates a MSS. Should be in the form of:
+% validateMSS_fun   = function that validates a MSS. Should be in the form of:
 %
 %                     flag = validateMSS_foo(X, s)
 %
@@ -66,10 +66,10 @@ N = size(X, 2);
 ind = 1:N;
 if ~isempty(ind_tabu)
     ind = ind(~ind_tabu);
-    NN = length(ind);
+    N = length(ind);
 
     % check if we are left with enough elements for finding a MSS
-    if (NN < k)
+    if (N < k)
 
         error('RANSACToolbox:get_minimal_sample_set', ...
             'Too few input input elements after removing tabu elements');

@@ -41,7 +41,7 @@ switch mode
 
         r = sum(CS);
         
-    case 'MSAC'
+    case {'MSAC', 'PROSAC'}
 
         rho = E;
         rho(rho >= T_noise_squared) = T_noise_squared;

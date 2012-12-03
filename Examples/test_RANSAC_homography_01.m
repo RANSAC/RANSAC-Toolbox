@@ -1,5 +1,5 @@
 % NAME:
-% test_RANSAC_homography.m
+% test_RANSAC_homography_01.m
 %
 % DESC:
 % test to estimate the parameters of an homography

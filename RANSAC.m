@@ -28,8 +28,6 @@ function [results, options] = RANSAC(X, options)
 %   T_noise_squared     = Error threshold (overrides sigma)
 %   epsilon             = False Alarm Rate (i.e. the probability we never
 %                         pick a good minimal sample set) (default = 1e-3)
-%   Ps                  = sampling probability ( 1 x size(X, 2) )
-%                         (default: uniform, i.e. Ps is empty)
 %   ind_tabu            = logical array indicating the elements that should
 %                         not be considered to construct the MSS (default
 %                         is empty)
@@ -56,8 +54,13 @@ function [results, options] = RANSAC(X, options)
 %   mode                = algorithm flavour
 %                         'RANSAC'  -> Fischler & Bolles
 %                         'MSAC'    -> Torr & Zisserman
+%                         'PROSAC'  -> Chum & Matas (will use MSAC scoring)
 %
-%
+%   Ps                  = if mode is 'RANSAC' or 'MSAC' then Ps is the
+%                         sampling probability (default: uniform, i.e. 
+%                         Ps is empty). If mode is 'PROSAC' then Ps is the 
+%                         quality of the matches. The size of the vector is
+%                         1 x size(X, 2)
 %   max_iters           = maximum number of iterations  (default = inf)
 %   min_iters           = minimum number of iterations  (default = 0)
 %   max_no_updates      = maximum number of iterations with no updates
@@ -91,6 +94,8 @@ function [results, options] = RANSAC(X, options)
 % SEE ALSO:             SetPathLocal
 
 % HISTORY:
+%
+% History is now deprecated and tracked in the git repository
 %
 % 1.1.0         - 01/12/08 - New packaging and some updates
 % 1.1.1         - 01/17/08 - Fixed a bug to set the max muber of iterations
@@ -204,6 +209,9 @@ if ~isfield(options, 'Ps')
     options.Ps = [];
 end;
 
+% check if we are running Octave
+isOctave = exist('OCTAVE_VERSION') ~= 0;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initializations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -218,7 +226,7 @@ end;
 tic;
 
 % get minimal subset size and model codimension
-[dummy, k] = feval(options.est_fun, []);
+[~, k] = feval(options.est_fun, []);
 if (options.verbose)
     fprintf('\nMinimal sample set dimension = %d', k);
 end;
@@ -228,19 +236,19 @@ N = size(X, 2);
 
 % exit if the number of points is smaller than the cardinality of a MSS
 if (N < k)
-
+    
     results.Theta = [];
     results.E = [];
     results.CS = [];
     results.iter = 0;
-
+    
     warning('RANSACToolbox:dataSetTooSmall', 'The input data set is composed by too few elements.')
-
+    
     return;
 end
 
 % get the noise threshold via Chi squared distribution
-[dummy T_noise_squared d] = feval(options.man_fun, [], [], options.sigma, options.P_inlier);
+[~, T_noise_squared, d] = feval(options.man_fun, [], [], options.sigma, options.P_inlier);
 
 % calculate the probability for the inlier detection.
 if ~isfield(options, 'T_noise_squared')
@@ -265,8 +273,12 @@ else
     seed = 2222;
 end;
 
-rand('twister', seed);
-randn('state', seed);
+if verLessThan('matlab', '7.0.0') || isOctave
+    rand('twister', seed);
+    randn('state', seed);
+else
+    rng(seed);
+end;
 
 global RANSAC_SEED;
 RANSAC_SEED = seed;
@@ -294,108 +306,117 @@ T_iter = options.max_iters;
 % number of iterations with no updates
 no_updates = 0;
 
+if strcmp(options.mode, 'PROSAC')
+    PROSAC_context = [];
+end;
+
 while (...
         (iter <= options.min_iters) || ...
         ( (iter <= T_iter) && (iter <= options.max_iters) && (no_updates <= options.max_no_updates) ) ...
         )
-
+    
     % update the number of iterations
     iter = iter + 1;
-
+    
     % initialize flags
     if ~isempty(options.notify_iters) && (mod(iter, options.notify_iters) == 0);
         notify = true;
     else
         notify = false;
     end;
-
+    
     update_sets = false;
     update_T_iter = false;
-
+    
     % Hypothesize ---------------------------------------------------------
-
+    
     % select MSS
-    [MSS Theta] = get_minimal_sample_set(k, X, options.Ps, options.est_fun, options.validateMSS_fun, options.ind_tabu);
-
+    switch options.mode
+        case {'RANSAC', 'MSAC'}
+            [MSS, Theta] = get_minimal_sample_set(k, X, options.Ps, options.est_fun, options.validateMSS_fun, options.ind_tabu);
+        case 'PROSAC'
+            [MSS, Theta, PROSAC_context] = get_minimal_sample_set_PROSAC(k, X, options.Ps, options.est_fun, options.validateMSS_fun, options.ind_tabu, PROSAC_context);
+    end;
+    
     % validate the parameter vector Theta
     if ~isempty(options.validateTheta_fun) && ~feval(options.validateTheta_fun, X, Theta, MSS)
         continue;
     end;
-
+    
     % Test ----------------------------------------------------------------
-
+    
     % find the CS
     [E, CS] = get_consensus_set(X, Theta, T_noise_squared, options.man_fun);
-
+    
     % get the ranking of the CS
     r = get_consensus_set_rank(CS, E, options.mode, T_noise_squared, options.sigma, d);
-
+    
     % get the indices
     ind_CS = find(CS);
-
+    
     % get the estimated number of inliers
     N_I = length(ind_CS);
-
+    
     % Update --------------------------------------------------------------
-
+    
     % if we found a larger inlier set update both the inlier set and the
     % number of iterations
     if (N_I >= N_I_star) && (r > r_star)
         
         notify = true;
         r_star = r;
-
+        
         update_sets = true;
         if (N_I > N_I_star)
             update_T_iter = true;
         end;
-    
+        
     end;
-
+    
     % update the sets
     if update_sets
-
+        
         Theta_star          = Theta;
         CS_star             = CS;
         E_star              = E;
         N_I_star            = N_I;
         ind_CS_star         = ind_CS;
-
+        
         no_updates = 0;
-
+        
     else
-
+        
         no_updates = no_updates + 1;
-
+        
     end;
-
+    
     % update the number of iterations
     if update_T_iter
-
+        
         q = get_q_RANSAC(N, N_I_star, k);
-
+        
         if (q > eps)
             T_iter = get_iter_RANSAC(options.epsilon, q);
         end;
-
+        
     end;
-
+    
     if (options.verbose)
-
+        
         if ( update_T_iter || update_sets || notify )
-
+            
             fprintf('\nIteration = %5d/%9d. ', iter, T_iter);
             fprintf('Inliers = %6d/%6d (rank is r = %8.8f)', N_I_star, N, r_star);
-
+            
         end;
-
+        
     end;
-
+    
     % if all the points have been assigned then exit the loop
     if (length(ind_CS_star) == N)
         break
     end;
-
+    
 end;
 
 % Reestimation --------------------------------------------------------
@@ -421,6 +442,7 @@ results.E = E_star;
 results.CS = CS_star;
 results.T_noise_squared = T_noise_squared;
 results.r = r_star;
+results.iter = iter;
 
 % perform stabilization
 if (options.stabilize)
