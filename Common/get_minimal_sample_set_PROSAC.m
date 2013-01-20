@@ -94,6 +94,35 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sample
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+debug = true;
+
+if debug
+    %nMax = nchoosek(N, k);
+    nMax = 10000;
+    qMSSMin = zeros(1, nMax);
+    qMSSMean = zeros(1, nMax);
+    for n = 1:nMax
+        % fetch the indices of the selected elements
+        s = PROSAC_context.ind_sorted(PROSAC_context.mask);
+        qMSSMin(n) = min(quality(s));
+        qMSSMean(n) = mean(quality(s));
+        
+        % get the next combination in lexicographical order
+        [PROSAC_context.mask, PROSAC_context.r, PROSAC_context.q] = next_combination(k, PROSAC_context.mask, PROSAC_context.r, PROSAC_context.q);
+    end;
+    
+    figure;
+    hold on
+    plot(qMSSMin, 'b', 'LineWidth', 2)
+    plot(qMSSMean, 'r', 'LineWidth', 1)
+    xlabel('MSS s')
+    ylabel('Bias')
+    legend('min_{d \in MSS} \omega(d)', 'mean_{d \in MSS} \omega(d)')
+    grid on
+    
+    
+    keyboard
+end
 
 while true
     
