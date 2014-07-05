@@ -1,4 +1,4 @@
-function [Theta, k] = estimate_foo(X, s)
+function [Theta, k] = estimate_foo(X, s, parameters)
 
 % [Theta k] = estimate_foo(X, s)
 %
@@ -10,6 +10,7 @@ function [Theta, k] = estimate_foo(X, s)
 % s                 = indices of the points used to estimate the 
 %                     parameter vector. If empty all the points 
 %                     are used
+% parameters        = a structure of parameters to be used by the function
 %
 % OUTPUT:
 % Theta             = estimated parameter vector Theta = H(:). If  
@@ -27,7 +28,7 @@ if (nargin == 0) || isempty(X)
 end;
 
 % select the points to estimate the parameter vector
-if (nargin == 2) && ~isempty(s)
+if (nargin >= 2) && ~isempty(s)
     X = X(:, s);
 end;
 
@@ -39,7 +40,7 @@ if (N < k)
 end;
 
 % call the estimation function foo
-Theta = foo(X);
+Theta = foo(X, parameters);
 
 % here you may want to check if the results are meaningful.
 % If not return an empty vector

@@ -1,4 +1,4 @@
-function [E T_noise_squared d] = error_RST(Theta, X, sigma, P_inlier)
+function [E, T_noise_squared, d] = error_RST(Theta, X, sigma, P_inlier)
 
 % [E T_noise_squared d] = error_RST(Theta, X, sigma, P_inlier)
 %
@@ -36,10 +36,10 @@ if ~isempty(Theta) && ~isempty(X)
     N = size(X, 2);        
 
     X12 = zeros(2, N);
-    [X12(1, :) X12(2, :)] = mapping_RST(X(1, :), X(2, :), true, Theta);
+    [X12(1, :), X12(2, :)] = mapping_RST(X(1, :), X(2, :), true, Theta);
 
     X21 = zeros(2, N);
-    [X21(1, :) X21(2, :)] = mapping_RST(X(3, :), X(4, :), false, Theta);
+    [X21(1, :), X21(2, :)] = mapping_RST(X(3, :), X(4, :), false, Theta);
     
     E1 = sum((X(1:2, :)-X21).^2, 1);
     E2 = sum((X(3:4, :)-X12).^2, 1);

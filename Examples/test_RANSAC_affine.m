@@ -118,7 +118,7 @@ axis equal tight
 xlabel('x');
 ylabel('y');
 
-legend('Estimate Inliers', 'Data Points')
+legend('Estimated Inliers', 'Data Points')
 
 subplot(1,2,2)
 hold on
@@ -129,4 +129,4 @@ axis equal tight
 xlabel('x');
 ylabel('y');
 
-legend('Estimate Inliers', 'Data Points')
+legend('Estimated Inliers', 'Data Points')

@@ -86,6 +86,9 @@ of templates for bibtex:
 Updates History (Discontinued: check the log on github)
 -------------------------------------------------------
 
+- Jul 2014: Added support for parameters structure to be passed to the 
+  evalaution and estiamtion functions (see test_RANSAC_circles.m)
+
 - Jan 2012: Migrating to github. From now on please check the update history 
   on github.
 

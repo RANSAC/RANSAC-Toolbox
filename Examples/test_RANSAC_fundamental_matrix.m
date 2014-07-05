@@ -12,7 +12,7 @@ clear
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load FundamentalMatrixData
+load FundamentalMatrixData 
 
 % set RANSAC options
 options.epsilon = 1e-6;

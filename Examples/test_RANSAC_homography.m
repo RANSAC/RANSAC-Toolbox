@@ -75,7 +75,7 @@ X1 = [X1i X1o];
 X2 = [X2i X2o];
 
 % scramble (just in case...)
-[dummy ind] = sort(rand(1, N));
+[dummy, ind] = sort(rand(1, N));
 X1 = X1(:, ind);
 X2 = X2(:, ind);
 
@@ -110,7 +110,7 @@ axis equal tight
 xlabel('x');
 ylabel('y');
 
-legend('Estimate Inliers', 'Data Points')
+legend('Estimated Inliers', 'Data Points')
 
 subplot(1,2,2)
 hold on
@@ -121,4 +121,4 @@ axis equal tight
 xlabel('x');
 ylabel('y');
 
-legend('Estimate Inliers', 'Data Points')
+legend('Estimated Inliers', 'Data Points')

@@ -1,6 +1,6 @@
-function r = get_consensus_set_rank(CS, E, mode, T_noise_squared, sigma, d)
+function r = get_consensus_set_rank(CS, E, mode, T_noise_squared)
 
-% r = get_consensus_set_rank(CS, E, mode, T_noise_squared, sigma, d)
+% r = get_consensus_set_rank(CS, E, mode, T_noise_squared)
 %
 % DESC:
 % get the rank of a consensus set 
@@ -17,11 +17,7 @@ function r = get_consensus_set_rank(CS, E, mode, T_noise_squared, sigma, d)
 % mode              = specify the type of ranking
 %                     0 -> RANSAC (cardinality of the CS)
 %                     1 -> MSAC 
-%                     2 -> MLESAC 
 % T_noise_squared   = noise threshold to discriminate inliers vs outliers
-% sigma             = standard deviation of the inlier error (Gaussian
-%                     distribution)
-% d                 = degrees of freedom of the error distribution
 %
 % OUTPUT:
 % r                 = consensus set rank
@@ -32,6 +28,7 @@ function r = get_consensus_set_rank(CS, E, mode, T_noise_squared, sigma, d)
 % 1.0.1             - 01/17/08 - Added different M-estimators
 % 1.0.2             - 02/22/08 - Removed the M-estimators
 %                                Added different ranking modes
+% 1.0.3             - 05/26/14 - Removed MLESAC
 
 N = length(CS);
 
@@ -49,31 +46,6 @@ switch mode
         % set to negative sothat also this rank is to be
         % maximized
         r = -sum(rho)/N;
-        
-    case 'MLESAC'
-        
-        % MLESAC
-        % compute the cumulative sigma (assuming independece)
-        sigmac_squared = d*sigma*sigma;
-        p_i = exp( -0.5 * (E/sigmac_squared) ) / ...
-            ( (2*pi*sigmac_squared)^(1/d) );
-        
-        Emax = max(E);
-        p_o = ones(1, N) / Emax;
-                        
-        gamma = linspace(0, 1, 128);
-        
-        r = -inf;
-        for h = 1:length(gamma)
-            
-            p = p_i*gamma(h) + p_o*(1-gamma(h));
-            L_ast = sum( log(p) );
-            
-            if (r < L_ast)
-                r = L_ast;
-            end;
-                
-        end
         
     otherwise
         

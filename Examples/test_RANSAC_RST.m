@@ -65,7 +65,7 @@ L = 256;
 % X1i = 512*randn(2, Ni);
 % gridded distribution
 s = linspace(-L, L, ceil(sqrt(Ni)));
-[x y] = ndgrid(s, s);
+[x, y] = ndgrid(s, s);
 X1i(1, :) = transpose(x(:));
 X1i(2, :) = transpose(y(:));
 X1i = X1i(:, 1:Ni);
@@ -79,7 +79,7 @@ X1 = [X1i X1o];
 X2 = [X2i X2o];
 
 % scrample (just in case...)
-[dummy ind] = sort(rand(1, N));
+[~, ind] = sort(rand(1, N));
 X1 = X1(:, ind);
 X2 = X2(:, ind);
 
@@ -116,7 +116,7 @@ axis equal tight
 xlabel('x');
 ylabel('y');
 
-legend('Estimate Inliers', 'Data Points')
+legend('Estimated Inliers', 'Data Points')
 
 subplot(1,2,2)
 hold on
@@ -127,4 +127,4 @@ axis equal tight
 xlabel('x');
 ylabel('y');
 
-legend('Estimate Inliers', 'Data Points')
+legend('Estimated Inliers', 'Data Points')

@@ -1,12 +1,12 @@
-function [E T_noise_squared d] = error_foo(Theta, X, sigma, P_inlier)
+function [E, T_noise_squared, d] = error_foo(Theta, X, sigma, P_inlier, parameters)
 
-% [E T_noise_squared d] = error_foo(Theta, X, sigma, P_inlier)
+% [E T_noise_squared d] = error_foo(Theta, X, sigma, P_inlier, parameters)
 %
 % DESC:
 % Template to estimate the error due to the foo constraint. To
 % return only the error threshold the function call should be:
 %
-% [dummy T_noise d] = error_foo([], [], sigma, P_inlier);
+% [dummy T_noise d] = error_foo([], [], sigma, P_inlier, parameters);
 %
 % INPUT:
 % Theta             = foo parameter vector
@@ -14,6 +14,7 @@ function [E T_noise_squared d] = error_foo(Theta, X, sigma, P_inlier)
 % sigma             = noise std
 % P_inlier          = Chi squared probability threshold for inliers
 %                     If 0 then use directly sigma.
+% parameters        = the parameters used by the functions
 %
 % OUTPUT:
 % E                 = squared error
